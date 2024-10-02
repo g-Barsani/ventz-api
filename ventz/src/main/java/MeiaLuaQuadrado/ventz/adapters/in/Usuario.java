@@ -29,10 +29,6 @@ public class Usuario extends MeiaLuaQuadrado.ventz.model.Usuario {
 //    @OneToMany(mappedBy = "usuario")  // 'usuario' refers to the 'Usuario' field in 'Ingresso' class
 //    private List<Ingresso> ingressos;
 
-    public int getIdUsuario() {
-        return idUsuario;
-    }
-
     @Override
     public String toString() {
         return "Usuario{" +
@@ -42,6 +38,10 @@ public class Usuario extends MeiaLuaQuadrado.ventz.model.Usuario {
                 ", cpf='" + cpf + '\'' +
                 ", senha='" + senha + '\'' +
                 '}';
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
     public void setIdUsuario(int idUsuario) {

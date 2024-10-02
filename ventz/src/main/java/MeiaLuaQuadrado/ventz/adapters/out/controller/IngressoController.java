@@ -31,7 +31,9 @@ public class IngressoController {
 
     @PostMapping("/inserirIngresso")
     public void inserirIngresso(@RequestBody Ingresso ingresso){
-        ingressoRepository.save(ingresso);
+
+
+            ingressoRepository.save(ingresso);
     }
 
     @GetMapping("/buscarPorUsuario/{idUsuario}")
