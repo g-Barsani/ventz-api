@@ -1,5 +1,6 @@
 package MeiaLuaQuadrado.ventz.adapters.in;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class Usuario extends MeiaLuaQuadrado.ventz.model.Usuario {
     @Column (name="senha", length = 20, nullable = false)
     private String senha;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario")  // 'usuario' refere-se ao campo 'usuario' na classe Ingresso
     private List<Ingresso> ingressos;
 

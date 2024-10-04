@@ -35,8 +35,6 @@ public class UsuarioController {
 
     }
 
-
-
     /*
     http://localhost:8080/usuarios/inserirUsuario
 
