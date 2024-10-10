@@ -1,8 +1,8 @@
 package MeiaLuaQuadrado.ventz.model;
 
 public abstract class Ingresso {
-    private int fkEventoIdEvento;
-    private int fkUsuarioIdUsuario;
-    private int idIngresso;
-    private boolean disponivel;
+    protected int fkEventoIdEvento;
+    protected int fkUsuarioIdUsuario;
+    protected int idIngresso;
+    protected boolean disponivel;
 }

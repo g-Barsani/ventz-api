@@ -17,13 +17,15 @@ public class Evento extends MeiaLuaQuadrado.ventz.model.Evento {
     @Column(name = "limite_pessoas", length = 6, nullable = false)
     private int limitePessoas;
     @Column(name = "data_inicio", nullable = false)
-    private  Date dataInicio;
+    private Date dataInicio;
     @Column(name = "data_termino", nullable = false)
     private Date dataTermino;
     @Column(name = "endereco", length = 500, nullable = false)
     private String endereco;
+    @Column(name = "ingressos_utilizados", nullable = false)
+    private int ingressosUtilizados;
 
-//     Chave estrangeira fkUsuarioIdUsuario
+    //     Chave estrangeira fkUsuarioIdUsuario
     @ManyToOne
     @JoinColumn(referencedColumnName = "id_usuario", nullable = false)
     private Usuario usuario;
@@ -38,7 +40,8 @@ public class Evento extends MeiaLuaQuadrado.ventz.model.Evento {
                 ", dataInicio=" + dataInicio +
                 ", dataTermino=" + dataTermino +
                 ", endereco='" + endereco + '\'' +
-                ", usuario=" + usuario.getIdUsuario() +
+                ", ingressosUtilizados=" + ingressosUtilizados +
+                ", usuario=" + usuario +
                 '}';
     }
 
@@ -98,6 +101,14 @@ public class Evento extends MeiaLuaQuadrado.ventz.model.Evento {
         this.endereco = endereco;
     }
 
+    public int getIngressosUtilizados() {
+        return ingressosUtilizados;
+    }
+
+    public void setIngressosUtilizados(int ingressosUtilizados) {
+        this.ingressosUtilizados = ingressosUtilizados;
+    }
+
     public Usuario getUsuario() {
         return usuario;
     }
@@ -106,4 +117,3 @@ public class Evento extends MeiaLuaQuadrado.ventz.model.Evento {
         this.usuario = usuario;
     }
 }
-
