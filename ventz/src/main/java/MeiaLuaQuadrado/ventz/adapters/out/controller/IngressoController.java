@@ -30,11 +30,12 @@ public class IngressoController {
 
     // http://localhost:8080/ingressos/buscarTodos
     @GetMapping("/buscarTodos")
-    public ResponseEntity<String> getIngressos() {
+    public ResponseEntity<String> getIngressos() throws JsonProcessingException {
         List<Ingresso> ingressos = ingressoRepository.findAll();
 
         if (!ingressos.isEmpty()) {
-            return ResponseEntity.ok().body(ingressos.toString()); // Retorna a lista de ingressos
+            return ResponseEntity.ok().body(objectMapper.writeValueAsString(ingressos));  // Retorna a lista de ingressos
+
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum ingresso encontrado");
         }
@@ -98,12 +99,12 @@ public class IngressoController {
 
             try {
 
-                if (ingressos == null) {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ingresso não encontrado");
-                } else {
+                if (ingressos != null) {
                     return ResponseEntity.ok(objectMapper.writeValueAsString(ingressos));// Retorna a lista de ingressos
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ingresso não encontrado");
                 }
-            }catch (JsonProcessingException e) {
+            } catch (JsonProcessingException e) {
                 // Em caso de erro na serialização, retornar status 500
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao processar JSON");
             }
@@ -119,18 +120,18 @@ public class IngressoController {
             if (ingressoOpt.isPresent()) {
                 Ingresso ingresso = ingressoOpt.get();
 
-            // Verifica se o ingresso está disponível
-            if (ingresso.getDisponivel()) {
-                // Marca o ingresso como indisponível (utilizado)
-                ingresso.setDisponivel(false);
-                ingressoRepository.save(ingresso);
+                // Verifica se o ingresso está disponível
+                if (ingresso.getDisponivel()) {
+                    // Marca o ingresso como indisponível (utilizado)
+                    ingresso.setDisponivel(false);
+                    ingressoRepository.save(ingresso);
 
-                return ResponseEntity.ok().body("Ingresso utilizado com sucesso.");
+                    return ResponseEntity.ok().body("Ingresso utilizado com sucesso.");
+                } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O ingresso já foi utilizado.");
+                }
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O ingresso já foi utilizado.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ingresso não encontrado.");
             }
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ingresso não encontrado.");
-        }
     }
 }

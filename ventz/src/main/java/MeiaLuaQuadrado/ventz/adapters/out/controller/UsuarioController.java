@@ -2,6 +2,7 @@ package MeiaLuaQuadrado.ventz.adapters.out.controller;
 
 import MeiaLuaQuadrado.ventz.adapters.in.Usuario;
 import MeiaLuaQuadrado.ventz.adapters.repositories.UsuarioRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,12 +23,14 @@ public class UsuarioController {
 
     // http://localhost:8080/usuarios/buscarTodos
     @GetMapping("/buscarTodos")
-    public ResponseEntity<String> getUsuarios() {
+    public ResponseEntity<String> getUsuarios() throws JsonProcessingException {
 
             List<Usuario> usuarios = usuarioRepository.findAll();
 
             if (!usuarios.isEmpty()){
-                return ResponseEntity.ok().body(usuarios.toString());
+                //NUNCA FACA DESSE JEITO, ISSO NÃO ECXSTE, NAO É UM JASON EXCOMUNiTIONIS
+//                return ResponseEntity.ok().body(usuarios.toString());
+                return ResponseEntity.ok(objectMapper.writeValueAsString(usuarios));
             }
             else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("USUÁRIO JÁ CADASTRADO");
@@ -68,12 +71,12 @@ public class UsuarioController {
 
     // http://localhost:8080/usuarios/buscarPorId/3
     @GetMapping("/buscarPorId/{id}")
-    public ResponseEntity<String> getUsuarioById(@PathVariable("id") Integer idUsuario) {
+    public ResponseEntity<String> getUsuarioById(@PathVariable("id") Integer idUsuario) throws JsonProcessingException {
         // Usar orElse(null) para retornar o valor ou null se não existir
         Usuario usuario = usuarioRepository.findByIdUsuario(idUsuario).orElse(null);
 
         if (usuario != null) {
-            return ResponseEntity.ok(usuario.toString());  // Retorna o objeto 'Usuario' como string com status 200
+            return ResponseEntity.ok(objectMapper.writeValueAsString(usuario));  // Retorna o objeto 'Usuario' como string com status 200
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado!");  // Retorna 404 com mensagem
         }
@@ -82,13 +85,13 @@ public class UsuarioController {
 
     // http://localhost:8080/usuarios/buscarPorEmailESenha?email=sapo.preto@example.com&senha=123
     @GetMapping("/buscarPorEmailESenha")
-    public ResponseEntity<String> validarUsuario(@RequestParam("email") String email, @RequestParam("senha") String senha) {
+    public ResponseEntity<String> validarUsuario(@RequestParam("email") String email, @RequestParam("senha") String senha) throws JsonProcessingException{
         // Busca o usuário pelo email e senha
         Usuario usuario = usuarioRepository.findByEmailAndSenha(email, senha).orElse(null);
 
         // Verifica se o usuário foi encontrado
         if (usuario != null) {
-            return ResponseEntity.ok(usuario.toString());
+            return ResponseEntity.ok(objectMapper.writeValueAsString(usuario));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Credenciais inválidas");
     }
@@ -96,15 +99,15 @@ public class UsuarioController {
 
     // localhost:8080/usuarios/buscarPorCpf?cpf=valorCPF
     @GetMapping("/buscarPorCpf")
-    public ResponseEntity<String> getUsuarioByCpf(@RequestParam("cpf") String cpf) {
+    public ResponseEntity<String> getUsuarioByCpf(@RequestParam("cpf") String cpf) throws JsonProcessingException{
         // Busca o usuário pelo CPF
         Usuario usuario = usuarioRepository.findByCpf(cpf).orElse(null);
 
         // Verifica se o usuário foi encontrado
         if (usuario!= null) {
-            return ResponseEntity.ok(usuario.toString()); // Retorna os dados do usuário
+            return ResponseEntity.ok(objectMapper.writeValueAsString(usuario)); // Retorna os dados do usuário
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CPF Não cadastrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("CPF Não cadastrado");
         }
     }
 }

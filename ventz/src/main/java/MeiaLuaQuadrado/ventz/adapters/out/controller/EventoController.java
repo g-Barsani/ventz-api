@@ -28,7 +28,7 @@ public class EventoController {
     public ResponseEntity<String> getEvento()  throws JsonProcessingException {
         List<Evento> eventos = eventoRepository.findAll();
         if (!eventos.isEmpty()) {
-            return ResponseEntity.ok().body(eventos.toString()); // Retorna a lista de ingressos
+            return ResponseEntity.ok(objectMapper.writeValueAsString(eventos)); // Retorna a lista de ingressos
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum evento encontrado");
         }
@@ -41,11 +41,11 @@ public class EventoController {
         // Busca os ingressos pelo ID do usuário
         List<Evento> eventos = eventoRepository.findByUsuarioId(idUsuario);
 
-        if (eventos.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ingressos não encontrados para esse usuário.");
-        } else {
+        if (!eventos.isEmpty()) {
             // Retorna a lista de ingressos como JSON
             return ResponseEntity.ok().body(objectMapper.writeValueAsString(eventos));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Eventos não encontrados para esse usuário.");
         }
     }
 
